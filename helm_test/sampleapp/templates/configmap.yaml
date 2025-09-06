@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}
+data: 
+  index.html: |
+    Hello Dhana \n
+    I am doing good, \n
+    hope you guys are doing well" \n
+  index2.html: |
+    Hello Anitha \n
+    How are you dude \n
+    where are you currently residing at \n
+    
+

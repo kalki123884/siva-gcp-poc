@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    {{- toYaml .Values.labels | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name | quote }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name | quote }}
+    spec:
+      imagePullSecrets:
+        - name: siva-gcp-docker-secret
+      containers:      
+        - name: nginx
+          {{- if .Values.canaryrelease }}
+          image: {{ .Values.canaryimage | quote }}
+          {{- else }}
+          image: {{ .Values.image | quote }}
+          {{- end }}
+          ports:
+            - name: appport
+              containerPort: 8080
+          env:
+            - name: env
+              value: dev
+            - name: environment
+              valueFrom:
+                configMapKeyRef:
+                  name: cm2
+                  key: appenv
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: cmmount
+              mountPath: /usr/share/nginx/html/index.html
+              subPath: index.html
+            - name: cmmount
+              mountPath: /usr/share/nginx/html/index3.html
+              subPath: index2.html
+      volumes:
+        - name: cmmount
+          configMap:
+            name: {{ .Release.Name }}
+            items:
+              - key: index.html
+                path: index.html
+              - key: index2.html
+                path: index2.html

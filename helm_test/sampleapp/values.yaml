@@ -1,0 +1,14 @@
+replicas: 1 
+image: sivasankarinkollu1/siva-k8s-gcp:1
+canaryimage: sivasankarinkollu1/siva-k8s-gcp:canary
+canaryrelease: false
+resources:
+  limits:
+    cpu: 200m
+    memory: 200Mi
+  requests:
+    cpu: 100m
+    memory: 110Mi
+labels:
+  app: dep1
+  owner: helm
