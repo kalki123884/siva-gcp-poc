@@ -3,7 +3,8 @@ pipeline{
   stages(){
     stage("checkout"){
       steps{
-        echo $scmVars
+        echo testing
+        sh 'ls -l'
       }
     }
   }
