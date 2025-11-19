@@ -1,4 +1,11 @@
-node {
-  def scmVars = checkout(scm)
-  echo $scmVars
+pipeline{
+  stages(){
+    stage("checkout"){
+      steps{
+        scmVars = checkout(scm)
+        echo $scmVars
+      }
+      
+    }
+  }
 }
